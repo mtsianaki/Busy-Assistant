@@ -10,11 +10,21 @@ Login to your Issabel server as `root` and run the following commands:
 
 ```bash
 cd /root
-dnf install -y git
+dnf install -y git unzip
 git clone https://github.com/mtsianaki/Busy-Assistant.git
 cd Busy-Assistant
-chmod +x install.sh
-./install.sh
+
+unzip -o busy-assistant-installer-v1.0.0.zip -d installer
+
+INSTALL_SCRIPT="$(find "$PWD/installer" -type f -iname 'install.sh' -print -quit)"
+if [ -z "$INSTALL_SCRIPT" ]; then
+  echo "خطا: install.sh داخل فایل ZIP پیدا نشد. فایل‌های استخراج‌شده:"
+  find "$PWD/installer" -maxdepth 4 -type f -print
+  exit 1
+fi
+
+cd "$(dirname "$INSTALL_SCRIPT")"
+bash "$(basename "$INSTALL_SCRIPT")"
 
 -------------------------------------------------------------------------------------------------------------------
 
